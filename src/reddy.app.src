@@ -1,0 +1,13 @@
+{application, reddy,
+ [
+  {description, "Another redis client"},
+  {vsn, "0.1"},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib,
+                  sasl
+                 ]},
+  {mod, {reddy_app, []}},
+  {env, []}
+ ]}.
