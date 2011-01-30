@@ -4,7 +4,7 @@
 
 %% API
 -export([start_link/0,
-         new_conn/2]).
+         new_conn/3]).
 
 -define(SERVER, ?MODULE).
 
@@ -14,8 +14,8 @@
 start_link() ->
     supervisor:start_link({local, ?SERVER}, ?MODULE, []).
 
-new_conn(Addr, Port) ->
-    supervisor:start_child(?SERVER, [Addr, Port]).
+new_conn(Addr, Port, Opts) ->
+    supervisor:start_child(?SERVER, [Addr, Port, Opts]).
 
 init([]) ->
     Child = {reddy_conn, {reddy_conn, start_link, []},

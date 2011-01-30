@@ -44,8 +44,12 @@ encode_op(Op, ArgCount) ->
     OpSize = ?LTOSTR(Op),
     ["*", integer_to_list(ArgCount), ?REDDY_EOL, "\$", OpSize, ?REDDY_EOL, Op, ?REDDY_EOL].
 
-parse_status(<<"+", _Reason/binary>>) ->
+parse_status(<<"+OK">>) ->
     ok;
+parse_status(<<"+PONG">>) ->
+    ok;
+parse_status(<<"+", Reason/binary>>) ->
+    {ok, Reason};
 parse_status(<<"-", Reason/binary>>) ->
     {error, Reason}.
 
@@ -68,6 +72,7 @@ parse_multi_bulk_count(<<"-ERR ", Reason/binary>>) ->
 status_test() ->
     [?assertMatch(ok, parse_status(<<"+OK">>)),
      ?assertMatch(ok, parse_status(<<"+PONG">>)),
+     ?assertMatch({ok, <<"string">>}, parse_status(<<"+string">>)),
      ?assertMatch({error, <<"BADAUTH">>}, parse_status(<<"-BADAUTH">>)),
      ?assertError(function_clause, parse_status(<<"\$4">>)),
      ?assertError(function_clause, parse_status(<<"\$3">>))].
