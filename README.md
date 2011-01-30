@@ -18,7 +18,7 @@ Async connection example:
     {ok, <0.50.0>}
     %% Last argument indicates if the caller wants the return value
     %% or not
-    3> {ok, ResultId} = reddy_lists:lpush_a(Conn, "bar", "1", true).
+    3> {ok, ResultId} = reddy_lists:lpush_(Conn, "bar", "1", true).
     {ok, #Ref<0.0.100>}
     4> 10> receive Msg -> Msg end.
     {#Ref<0.0.0.100>,1}
