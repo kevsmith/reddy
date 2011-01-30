@@ -1,0 +1,1 @@
+-define(CONNECT(), reddy_conn:connect(os:getenv("REDIS_HOST"), list_to_integer(os:getenv("REDIS_PORT")))).

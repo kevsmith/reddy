@@ -83,12 +83,7 @@ handle_call({enqueue, Op, Caller, WantsReturn}, _From, #state{sock=Sock, cmd_que
                                                               tracefile=File}=State) ->
     Ref = erlang:make_ref(),
     Bin = reddy_protocol:to_iolist(Op),
-    case File of
-        undefined ->
-            ok;
-        _ ->
-            file:write_file(File, ["-----CLIENT-----\n", Bin], [append])
-    end,
+    log_client(File, Bin),
     case gen_tcp:send(Sock, Bin) of
         ok ->
             Reply = if
@@ -110,12 +105,7 @@ handle_cast(_Msg, State) ->
     {noreply, State}.
 
 handle_info({tcp, Sock, Data}, #state{cmd_queue=Queue, tracefile=File}=State) ->
-    case File of
-        undefined ->
-            ok;
-        _ ->
-            file:write_file(File, ["-----SERVER-----\n", Data], [append])
-    end,
+    log_server(File, Data),
     inet:setopts(Sock, [{packet, raw}]),
     case queue:is_empty(Queue) of
         true ->
@@ -165,7 +155,7 @@ parse_response(Sock, File, bulk, Data) ->
             undefined;
         Size ->
             {ok, Body} = gen_tcp:recv(Sock, Size + 2, 0),
-            file:write_file(File, ["-----SERVER-----\n", Body], [append]),
+            log_server(File, Body),
             strip_return_char(Body)
     end;
 parse_response(Sock, File, multi_bulk, Data) ->
@@ -182,7 +172,7 @@ read_multi_bulk_body(_Sock, _File, 0, Accum) ->
 read_multi_bulk_body(Sock, File, Count, Accum) ->
     inet:setopts(Sock, [{packet, line}]),
     {ok, Data} = gen_tcp:recv(Sock, 0, 0),
-    file:write_file(File, ["-----SERVER-----\n", Data], [append]),
+    log_server(File, Data),
     Body = strip_return_char(Data),
     read_multi_bulk_body(Sock, File, Count - 1, [parse_response(Sock, File, bulk, Body)|Accum]).
 
@@ -190,3 +180,13 @@ strip_return_char(Data) ->
     BodySize = size(Data) - 2,
     <<Body:BodySize/binary, _/binary>> = Data,
     Body.
+
+log_server(undefined, _Output) ->
+    ok;
+log_server(File, Output) ->
+    file:write_file(File, ["-----SERVER-----\n", Output], [append]).
+
+log_client(undefined, _Output) ->
+    ok;
+log_client(File, Output) ->
+    file:write_file(File, ["-----CLIENT-----\n", Output], [append]).
