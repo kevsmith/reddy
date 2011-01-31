@@ -10,8 +10,8 @@
          expire_/4,
          expireat/3,
          expireat_/4,
-         keys/1,
-         keys_/2,
+         keys/2,
+         keys_/3,
          move/3,
          move_/4,
          persist/2,
@@ -50,11 +50,11 @@ expireat(Conn, Key, Timestamp) ->
 expireat_(Conn, Key, Timestamp, WantsReturn) ->
     reddy_conn:async(Conn, ?EXPIREAT, [Key, convert_ts(Timestamp)], WantsReturn).
 
-keys(Conn) ->
-    reddy_conn:sync(Conn, ?KEYS, []).
+keys(Conn, Pattern) ->
+    reddy_conn:sync(Conn, ?KEYS, [Pattern]).
 
-keys_(Conn, WantsReturn) ->
-    reddy_conn:async(Conn, ?KEYS, [], WantsReturn).
+keys_(Conn, Pattern, WantsReturn) ->
+    reddy_conn:async(Conn, ?KEYS, [Pattern], WantsReturn).
 
 move(Conn, Key, Db) ->
     reddy_conn:sync(Conn, ?MOVE, [Key, Db]).
