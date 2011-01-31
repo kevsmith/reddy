@@ -122,7 +122,7 @@ create(Op=?PERSIST, Args) ->
 create(Op=?RANDOMKEY, _Args) ->
     #reddy_op{name=Op,
               args=[],
-              resp_type=integer};
+              resp_type=bulk};
 
 create(Op=?RENAME, Args) ->
     #reddy_op{name=Op,
