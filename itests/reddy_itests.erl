@@ -14,4 +14,5 @@ run(Host, Port) ->
     eunit:test(?MODULE).
 
 all_test_() ->
-    [{module, reddy_itest_lists}].
+    [{module, reddy_itest_lists},
+     {module, reddy_itest_keys}].

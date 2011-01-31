@@ -1,1 +1,2 @@
 -define(CONNECT(), reddy_conn:connect(os:getenv("REDIS_HOST"), list_to_integer(os:getenv("REDIS_PORT")))).
+-define(WAIT(X), fun() -> ?debugMsg("Waiting for redis..."), timer:sleep(X) end()).

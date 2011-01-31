@@ -27,11 +27,11 @@
          type/2,
          type_/3]).
 
-del(Conn, Key) ->
-    reddy_conn:sync(Conn, ?DEL, [Key]).
+del(Conn, Keys) when is_list(Keys) ->
+    reddy_conn:sync(Conn, ?DEL, Keys).
 
-del_(Conn, Key, WantsReturn) ->
-    reddy_conn:async(Conn, ?DEL, [Key], WantsReturn).
+del_(Conn, Keys, WantsReturn) when is_list(Keys) ->
+    reddy_conn:async(Conn, ?DEL, Keys, WantsReturn).
 
 exists(Conn, Key) ->
     reddy_conn:sync(Conn, ?EXISTS, [Key]).
