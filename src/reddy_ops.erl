@@ -150,6 +150,71 @@ create(Op=?SADD, Args) ->
               args=Args,
               resp_type=integer};
 
+create(Op=?SCARD, Args) ->
+    #reddy_op{name=Op,
+              args=Args,
+              resp_type=integer};
+
+create(Op=?SDIFF, Args) ->
+    #reddy_op{name=Op,
+              args=Args,
+              resp_type=multi_bulk};
+
+create(Op=?SDIFFSTORE, Args) ->
+    #reddy_op{name=Op,
+              args=lists:flatten(Args),
+              resp_type=integer};
+
+create(Op=?SINTER, Args) ->
+    #reddy_op{name=Op,
+              args=Args,
+              resp_type=multi_bulk};
+
+create(Op=?SINTERSTORE, Args) ->
+    #reddy_op{name=Op,
+              args=lists:flatten(Args),
+              resp_type=integer};
+
+create(Op=?SISMEMBER, Args) ->
+    #reddy_op{name=Op,
+              args=Args,
+              resp_type=integer};
+
+create(Op=?SMEMBERS, Args) ->
+    #reddy_op{name=Op,
+              args=Args,
+              resp_type=multi_bulk};
+
+create(Op=?SMOVE, Args) ->
+    #reddy_op{name=Op,
+              args=Args,
+              resp_type=integer};
+
+create(Op=?SPOP, Args) ->
+    #reddy_op{name=Op,
+              args=Args,
+              resp_type=bulk};
+
+create(Op=?SRANDMEMBER, Args) ->
+    #reddy_op{name=Op,
+              args=Args,
+              resp_type=bulk};
+
+create(Op=?SREM, Args) ->
+    #reddy_op{name=Op,
+              args=Args,
+              resp_type=integer};
+
+create(Op=?SUNION, Args) ->
+    #reddy_op{name=Op,
+              args=Args,
+              resp_type=multi_bulk};
+
+create(Op=?SUNIONSTORE, Args) ->
+    #reddy_op{name=Op,
+              args=lists:flatten(Args),
+              resp_type=integer};
+
 %% Server ops
 create(Op=?INFO, _Args) ->
     #reddy_op{name=Op,
