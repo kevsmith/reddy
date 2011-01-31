@@ -27,75 +27,75 @@
          type/2,
          type_/3]).
 
-del(Conn, Keys) when is_list(Keys) ->
+del(Conn, Keys) when is_list(Keys), is_pid(Conn) ->
     reddy_conn:sync(Conn, ?DEL, Keys).
 
-del_(Conn, Keys, WantsReturn) when is_list(Keys) ->
+del_(Conn, Keys, WantsReturn) when is_list(Keys), is_pid(Conn) ->
     reddy_conn:async(Conn, ?DEL, Keys, WantsReturn).
 
-exists(Conn, Key) ->
+exists(Conn, Key) when is_pid(Conn) ->
     reddy_conn:sync(Conn, ?EXISTS, [Key]).
-exists_(Conn, Key, WantsReturn) ->
+exists_(Conn, Key, WantsReturn) when is_pid(Conn) ->
     reddy_conn:async(Conn, ?EXISTS, [Key], WantsReturn).
 
-expire(Conn, Key, Seconds) ->
+expire(Conn, Key, Seconds) when is_pid(Conn) ->
     reddy_conn:sync(Conn, ?EXPIRE, [Key, Seconds]).
 
-expire_(Conn, Key, Seconds, WantsReturn) ->
+expire_(Conn, Key, Seconds, WantsReturn) when is_pid(Conn) ->
     reddy_conn:async(Conn, ?EXPIRE, [Key, Seconds], WantsReturn).
 
-expireat(Conn, Key, Timestamp) ->
+expireat(Conn, Key, Timestamp) when is_pid(Conn) ->
     reddy_conn:sync(Conn, ?EXPIREAT, [Key, convert_ts(Timestamp)]).
 
-expireat_(Conn, Key, Timestamp, WantsReturn) ->
+expireat_(Conn, Key, Timestamp, WantsReturn) when is_pid(Conn) ->
     reddy_conn:async(Conn, ?EXPIREAT, [Key, convert_ts(Timestamp)], WantsReturn).
 
-keys(Conn, Pattern) ->
+keys(Conn, Pattern) when is_pid(Conn) ->
     reddy_conn:sync(Conn, ?KEYS, [Pattern]).
 
-keys_(Conn, Pattern, WantsReturn) ->
+keys_(Conn, Pattern, WantsReturn) when is_pid(Conn) ->
     reddy_conn:async(Conn, ?KEYS, [Pattern], WantsReturn).
 
-move(Conn, Key, Db) ->
+move(Conn, Key, Db) when is_pid(Conn) ->
     reddy_conn:sync(Conn, ?MOVE, [Key, Db]).
 
-move_(Conn, Key, Db, WantsReturn) ->
+move_(Conn, Key, Db, WantsReturn) when is_pid(Conn) ->
     reddy_conn:async(Conn, ?MOVE, [Key, Db], WantsReturn).
 
-persist(Conn, Key) ->
+persist(Conn, Key) when is_pid(Conn) ->
     reddy_conn:sync(Conn, ?PERSIST, [Key]).
 
-persist_(Conn, Key, WantsReturn) ->
+persist_(Conn, Key, WantsReturn) when is_pid(Conn) ->
     reddy_conn:async(Conn, ?PERSIST, [Key], WantsReturn).
 
-randomkey(Conn) ->
+randomkey(Conn) when is_pid(Conn) ->
     reddy_conn:sync(Conn, ?RANDOMKEY, []).
 
-randomkey_(Conn, WantsReturn) ->
+randomkey_(Conn, WantsReturn) when is_pid(Conn) ->
     reddy_conn:asysnc(Conn, ?RANDOMKEY, [], WantsReturn).
 
-rename(Conn, Key, NewKey) ->
+rename(Conn, Key, NewKey) when is_pid(Conn) ->
     reddy_conn:sync(Conn, ?RENAME, [Key, NewKey]).
 
-rename_(Conn, Key, NewKey, WantsReturn) ->
+rename_(Conn, Key, NewKey, WantsReturn) when is_pid(Conn) ->
     reddy_conn:async(Conn, ?RENAME, [Key, NewKey], WantsReturn).
 
-renamenx(Conn, Key, NewKey) ->
+renamenx(Conn, Key, NewKey) when is_pid(Conn) ->
     reddy_conn:sync(Conn, ?RENAMENX, [Key, NewKey]).
 
-renamenx_(Conn, Key, NewKey, WantsReturn) ->
+renamenx_(Conn, Key, NewKey, WantsReturn) when is_pid(Conn) ->
     reddy_conn:async(Conn, ?RENAMENX, [Key, NewKey], WantsReturn).
 
-ttl(Conn, Key) ->
+ttl(Conn, Key) when is_pid(Conn) ->
     reddy_conn:sync(Conn, ?TTL, [Key]).
 
-ttl_(Conn, Key, WantsReturn) ->
+ttl_(Conn, Key, WantsReturn) when is_pid(Conn) ->
     reddy_conn:async(Conn, ?TTL, [Key], WantsReturn).
 
-type(Conn, Key) ->
+type(Conn, Key) when is_pid(Conn) ->
     reddy_conn:sync(Conn, ?TYPE, [Key]).
 
-type_(Conn, Key, WantsReturn) ->
+type_(Conn, Key, WantsReturn) when is_pid(Conn) ->
     reddy_conn:async(Conn, ?TYPE, [Key], WantsReturn).
 
 %% Internal functions

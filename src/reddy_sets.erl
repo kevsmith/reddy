@@ -70,47 +70,47 @@ sinterstore_(Conn, Dest, Keys, WantsReturn) ->
 sismember(Conn, Key, Member) ->
     reddy_conn:sync(Conn, ?SISMEMBER, [Key, Member]).
 
-sismember_(Conn, Key, Member, WantsReturn) ->
+sismember_(Conn, Key, Member, WantsReturn) when is_pid(Conn) ->
     reddy_conn:async(Conn, ?SISMEMBER, [Key, Member], WantsReturn).
 
-smembers(Conn, Key) ->
+smembers(Conn, Key) when is_pid(Conn) ->
     reddy_conn:sync(Conn, ?SMEMBERS, [Key]).
 
-smembers_(Conn, Key, WantsReturn) ->
+smembers_(Conn, Key, WantsReturn) when is_pid(Conn) ->
     reddy_conn:async(Conn, ?SMEMBERS, [Key], WantsReturn).
 
-smove(Conn, Source, Dest, Member) ->
+smove(Conn, Source, Dest, Member) when is_pid(Conn) ->
     reddy_conn:sync(Conn, ?SMOVE, [Source, Dest, Member]).
 
-smove_(Conn, Source, Dest, Member, WantsReturn) ->
+smove_(Conn, Source, Dest, Member, WantsReturn) when is_pid(Conn) ->
     reddy_conn:async(Conn, ?SMOVE, [Source, Dest, Member], WantsReturn).
 
-spop(Conn, Key) ->
+spop(Conn, Key) when is_pid(Conn) ->
     reddy_conn:sync(Conn, ?SPOP, [Key]).
 
-spop_(Conn, Key, WantsReturn) ->
+spop_(Conn, Key, WantsReturn) when is_pid(Conn) ->
     reddy_conn:async(Conn, ?SPOP, [Key], WantsReturn).
 
-srandmember(Conn, Key) ->
+srandmember(Conn, Key) when is_pid(Conn) ->
     reddy_conn:sync(Conn, ?SRANDMEMBER, [Key]).
 
-srandmember_(Conn, Key, WantsReturn) ->
+srandmember_(Conn, Key, WantsReturn) when is_pid(Conn) ->
     reddy_conn:async(Conn, ?SRANDMEMBER, [Key], WantsReturn).
 
-srem(Conn, Key, Member) ->
+srem(Conn, Key, Member) when is_pid(Conn) ->
     reddy_conn:sync(Conn, ?SREM, [Key, Member]).
 
-srem_(Conn, Key, Member, WantsReturn) ->
+srem_(Conn, Key, Member, WantsReturn) when is_pid(Conn) ->
     reddy_conn:async(Conn, ?SREM, [Key, Member], WantsReturn).
 
-sunion(Conn, Keys) ->
+sunion(Conn, Keys) when is_pid(Conn) ->
     reddy_conn:sync(Conn, ?SUNION, Keys).
 
-sunion_(Conn, Keys, WantsReturn) ->
+sunion_(Conn, Keys, WantsReturn) when is_pid(Conn) ->
     reddy_conn:async(Conn, ?SUNION, Keys, WantsReturn).
 
-sunionstore(Conn, Dest, Keys) ->
+sunionstore(Conn, Dest, Keys) when is_pid(Conn) ->
     reddy_conn:sync(Conn, ?SUNIONSTORE, [Dest, Keys]).
 
-sunionstore_(Conn, Dest, Keys, WantsReturn) ->
+sunionstore_(Conn, Dest, Keys, WantsReturn) when is_pid(Conn) ->
     reddy_conn:async(Conn, ?SUNIONSTORE, [Dest, Keys], WantsReturn).
