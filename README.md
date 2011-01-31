@@ -1,6 +1,7 @@
 ### What is reddy?
 reddy is simply my attempt at writing a better redis client in Erlang. It tries to address shortcomings
 I saw in other clients like:
+
 * Too low-level: Yes, you can manually shove binaries over a socket and make it work but that's hardly
 a satisfying solution. reddy strives to provide a low-friction, self-documenting API. redis' excellent
 command [docs](http://redis.io/commands) should serve equally well as docs for reddy's API.
