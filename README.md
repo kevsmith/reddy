@@ -26,6 +26,16 @@ solid support for executing redis operations asynchronously.
     <<"2">>
     6>
 
+### Set hashes as proplists
+    1> application:start(reddy)
+    ok
+    2> {ok, Conn} = reddy_conn:connect("127.0.0.1", 6379).
+    {ok, <0.50.0>}
+    3> reddy_hashes:hmset(C, <<"foo">>, [{today, <<"Tuesday">>}, {redis_is, <<"awesome">>}]).
+    ok
+    4> reddy_hashes:hvals(C, <<"foo">>).
+    [<<"Tuesday">>,<<"awesome">>]
+
 ### Async connection example:
     1> application:start(reddy)
     ok
