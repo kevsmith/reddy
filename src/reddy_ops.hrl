@@ -48,6 +48,20 @@
 -define(SUNION, "SUNION").
 -define(SUNIONSTORE, "SUNIONSTORE").
 
+%% Hash ops
+-define(HDEL, "HDEL").
+-define(HEXISTS, "HEXISTS").
+-define(HGET, "HGET").
+-define(HGETALL, "HGETALL").
+-define(HINCRBY, "HINCRBY").
+-define(HKEYS, "HKEYS").
+-define(HLEN, "HLEN").
+-define(HMGET, "HMGET").
+-define(HMSET, "HMSET").
+-define(HSET, "HSET").
+-define(HSETNX, "HSETNX").
+-define(HVALS, "HVALS").
+
 %% Server ops
 -define(INFO, "INFO").
 -define(AUTH, "AUTH").

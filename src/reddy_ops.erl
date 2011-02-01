@@ -215,6 +215,67 @@ create(Op=?SUNIONSTORE, Args) ->
               args=lists:flatten(Args),
               resp_type=integer};
 
+%% Hash ops
+create(Op=?HDEL, Args) ->
+    #reddy_op{name=Op,
+              args=Args,
+              resp_type=integer};
+
+create(Op=?HEXISTS, Args) ->
+    #reddy_op{name=Op,
+              args=Args,
+              resp_type=integer};
+
+create(Op=?HGET, Args) ->
+    #reddy_op{name=Op,
+              args=Args,
+              resp_type=integer};
+
+create(Op=?HGETALL, Args) ->
+    #reddy_op{name=Op,
+              args=Args,
+              resp_type=multi_bulk};
+
+create(Op=?HINCRBY, Args) ->
+    #reddy_op{name=Op,
+              args=Args,
+              resp_type=integer};
+
+create(Op=?HKEYS, Args) ->
+    #reddy_op{name=Op,
+              args=Args,
+              resp_type=multi_bulk};
+
+create(Op=?HLEN, Args) ->
+    #reddy_op{name=Op,
+              args=Args,
+              resp_type=integer};
+
+create(Op=?HMGET, Args) ->
+    #reddy_op{name=Op,
+              args=lists:flatten(Args),
+              resp_type=multi_bulk};
+
+create(Op=?HMSET, Args) ->
+    #reddy_op{name=Op,
+              args=lists:flatten(Args),
+              resp_type=status};
+
+create(Op=?HSET, Args) ->
+    #reddy_op{name=Op,
+              args=Args,
+              resp_type=integer};
+
+create(Op=?HSETNX, Args) ->
+    #reddy_op{name=Op,
+              args=Args,
+              resp_type=integer};
+
+create(Op=?HVALS, Args) ->
+    #reddy_op{name=Op,
+              args=Args,
+              resp_type=multi_bulk};
+
 %% Server ops
 create(Op=?INFO, _Args) ->
     #reddy_op{name=Op,
