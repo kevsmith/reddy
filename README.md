@@ -13,7 +13,7 @@ make any assumptions about how you'd like to use it. Start as many connections a
 solid support for executing redis operations asynchronously.
 
 
-### Simple connection example:
+### Synchronous API
     1> application:start(reddy)
     ok
     2> {ok, Conn} = reddy_conn:connect("127.0.0.1", 6379).
@@ -24,7 +24,17 @@ solid support for executing redis operations asynchronously.
     2
     5> reddy_lists:lpop(Conn, "foo").
     <<"2">>
-    6>
+
+### Async API
+    1> application:start(reddy)
+    ok
+    2> {ok, Conn} = reddy_conn:connect("127.0.0.1", 6379).
+    {ok, <0.50.0>}
+    3> {ok, ResultId} = reddy_lists:lpush_(Conn, "bar", "1", true).
+    {ok, #Ref<0.0.100>}
+    4> receive {ResultId, Result} -> Result end.
+    1
+_Note: the trailing underscore on the function name indicates it is an async operation._
 
 ### Set hashes as proplists
     1> application:start(reddy)
@@ -36,13 +46,3 @@ solid support for executing redis operations asynchronously.
     4> reddy_hashes:hvals(C, <<"foo">>).
     [<<"Tuesday">>,<<"awesome">>]
 
-### Async connection example:
-    1> application:start(reddy)
-    ok
-    2> {ok, Conn} = reddy_conn:connect("127.0.0.1", 6379).
-    {ok, <0.50.0>}
-    3> {ok, ResultId} = reddy_lists:lpush_(Conn, "bar", "1", true).
-    {ok, #Ref<0.0.100>}
-    4> receive {ResultId, Result} -> Result end.
-    1
-_Note: the trailing underscore on the function name indicates it is an async operation._
