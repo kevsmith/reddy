@@ -35,7 +35,7 @@
          rpushx_/4]).
 
 blpop(Conn, Keys, Timeout) when is_pid(Conn) ->
-  reddy_conn:sync(Conn, ?BLPOP, [Keys, Timeout]).
+    reddy_conn:sync(Conn, ?BLPOP, [Keys, Timeout]).
 
 brpop(Conn, Keys, Timeout) when is_pid(Conn) ->
     reddy_conn:sync(Conn, ?BRPOP, [Keys, Timeout]).
@@ -44,89 +44,149 @@ brpoplpush(Conn, Source, Dest, Timeout) ->
     reddy_conn:sync(Conn, ?BRPOPLPUSH, [Source, Dest, Timeout]).
 
 lindex(Conn, Key, Index) when is_pid(Conn) ->
-  reddy_conn:sync(Conn, ?LINDEX, [Key, Index]).
+    reddy_conn:sync(Conn, ?LINDEX, [Key, Index]);
+lindex(Pool, Key, Index) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, lindex, [Key, Index]).
 
 lindex_(Conn, Key, Index, WantsReturn) when is_pid(Conn) ->
-  reddy_conn:async(Conn, ?LINDEX, [Key, Index], WantsReturn).
+    reddy_conn:async(Conn, ?LINDEX, [Key, Index], WantsReturn);
+lindex_(Pool, Key, Index, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, lindex_, [Key, Index, WantsReturn]).
 
 linsert(Conn, Key, BeforeOrAfter, Pivot, Value) when is_pid(Conn),
                                                      BeforeOrAfter =:= "BEFORE"
                                                      orelse BeforeOrAfter =:= "AFTER" ->
-  reddy_conn:sync(Conn, ?LINSERT, [Key, BeforeOrAfter, Pivot, Value]).
+    reddy_conn:sync(Conn, ?LINSERT, [Key, BeforeOrAfter, Pivot, Value]);
+linsert(Pool, Key, BeforeOrAfter, Pivot, Value) when is_atom(Pool),
+                                                     BeforeOrAfter =:= "BEFORE"
+                                                     orelse BeforeOrAfter =:= "AFTER" ->
+    ?WITH_POOL(Pool, linsert, [Key, BeforeOrAfter, Pivot, Value]).
 
 linsert_(Conn, Key, BeforeOrAfter, Pivot, Value, WantsReturn) when is_pid(Conn),
                                                                    BeforeOrAfter =:= "BEFORE"
                                                                    orelse BeforeOrAfter =:= "AFTER" ->
-    reddy_conn:async(Conn, ?LINSERT, [Key, BeforeOrAfter, Pivot, Value], WantsReturn).
+    reddy_conn:async(Conn, ?LINSERT, [Key, BeforeOrAfter, Pivot, Value], WantsReturn);
+linsert_(Pool, Key, BeforeOrAfter, Pivot, Value, WantsReturn) when is_atom(Pool),
+                                                                   BeforeOrAfter =:= "BEFORE"
+                                                                   orelse BeforeOrAfter =:= "AFTER" ->
+    ?WITH_POOL(Pool, linsert_, [Key, BeforeOrAfter, Pivot, Value, WantsReturn]).
 
 llen(Conn, Key) when is_pid(Conn) ->
-    reddy_conn:sync(Conn, ?LLEN, [Key]).
+    reddy_conn:sync(Conn, ?LLEN, [Key]);
+llen(Pool, Key) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, llen, [Key]).
 
 llen_(Conn, Key, WantsReturn) when is_pid(Conn) ->
-    reddy_conn:async(Conn, ?LLEN, [Key], WantsReturn).
+    reddy_conn:async(Conn, ?LLEN, [Key], WantsReturn);
+llen_(Pool, Key, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, llen_, [Key, WantsReturn]).
 
 lpop(Conn, Key) when is_pid(Conn) ->
-    reddy_conn:sync(Conn, ?LPOP, [Key]).
+    reddy_conn:sync(Conn, ?LPOP, [Key]);
+lpop(Pool, Key) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, lpop, [Key]).
 
 lpop_(Conn, Key, WantsReturn) when is_pid(Conn) ->
-    reddy_conn:async(Conn, ?LPOP, [Key], WantsReturn).
+    reddy_conn:async(Conn, ?LPOP, [Key], WantsReturn);
+lpop_(Pool, Key, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, lpop_, [Key, WantsReturn]).
 
 lpush(Conn, Key, Value) when is_pid(Conn) ->
-    reddy_conn:sync(Conn, ?LPUSH, [Key, Value]).
+    reddy_conn:sync(Conn, ?LPUSH, [Key, Value]);
+lpush(Pool, Key, Value) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, lpush, [Key, Value]).
 
 lpush_(Conn, Key, Value, WantsReturn) when is_pid(Conn) ->
-    reddy_conn:async(Conn, ?LPUSH, [Key, Value], WantsReturn).
+    reddy_conn:async(Conn, ?LPUSH, [Key, Value], WantsReturn);
+lpush_(Pool, Key, Value, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, lpush_, [Key, Value, WantsReturn]).
 
 lpushx(Conn, Key, Value) when is_pid(Conn) ->
-    reddy_conn:sync(Conn, ?LPUSHX, [Key, Value]).
+    reddy_conn:sync(Conn, ?LPUSHX, [Key, Value]);
+lpushx(Pool, Key, Value) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, lpushx, [Key, Value]).
 
 lpushx_(Conn, Key, Value, WantsReturn) when is_pid(Conn) ->
-    reddy_conn:async(Conn, ?LPUSHX, [Key, Value], WantsReturn).
+    reddy_conn:async(Conn, ?LPUSHX, [Key, Value], WantsReturn);
+lpushx_(Pool, Key, Value, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, lpushx_, [Key, Value, WantsReturn]).
 
 lrange(Conn, Key, Start, Stop) when is_pid(Conn) ->
-    reddy_conn:sync(Conn, ?LRANGE, [Key, Start, Stop]).
+    reddy_conn:sync(Conn, ?LRANGE, [Key, Start, Stop]);
+lrange(Pool, Key, Start, Stop) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, lrange, [Key, Start, Stop]).
 
 lrange_(Conn, Key, Start, Stop, WantsReturn) when is_pid(Conn) ->
-    reddy_conn:async(Conn, ?LRANGE, [Key, Start, Stop], WantsReturn).
+    reddy_conn:async(Conn, ?LRANGE, [Key, Start, Stop], WantsReturn);
+lrange_(Pool, Key, Start, Stop, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, lrange_, [Key, Start, Stop, WantsReturn]).
 
 lrem(Conn, Key, Count, Value) when is_pid(Conn) ->
-    reddy_conn:sync(Conn, ?LREM, [Key, Count, Value]).
+    reddy_conn:sync(Conn, ?LREM, [Key, Count, Value]);
+lrem(Pool, Key, Count, Value) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, lrem, [Key, Count, Value]).
 
 lrem_(Conn, Key, Count, Value, WantsReturn) when is_pid(Conn) ->
-    reddy_conn:async(Conn, ?LREM, [Key, Count, Value], WantsReturn).
+    reddy_conn:async(Conn, ?LREM, [Key, Count, Value], WantsReturn);
+lrem_(Pool, Key, Count, Value, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, lrem_, [Key, Count, Value, WantsReturn]).
 
 lset(Conn, Key, Index, Value) when is_pid(Conn) ->
-    reddy_conn:sync(Conn, ?LSET, [Key, Index, Value]).
+    reddy_conn:sync(Conn, ?LSET, [Key, Index, Value]);
+lset(Pool, Key, Index, Value) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, lset, [Key, Index, Value]).
 
 lset_(Conn, Key, Index, Value, WantsReturn) when is_pid(Conn) ->
-    reddy_conn:async(Conn, ?LSET, [Key, Index, Value], WantsReturn).
+    reddy_conn:async(Conn, ?LSET, [Key, Index, Value], WantsReturn);
+lset_(Pool, Key, Index, Value, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, lset_, [Key, Index, Value, WantsReturn]).
 
 ltrim(Conn, Key, Start, Stop) when is_pid(Conn) ->
-    reddy_conn:sync(Conn, ?LTRIM, [Key, Start, Stop]).
+    reddy_conn:sync(Conn, ?LTRIM, [Key, Start, Stop]);
+ltrim(Pool, Key, Start, Stop) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, ltrim, [Key, Start, Stop]).
 
 ltrim_(Conn, Key, Start, Stop, WantsReturn) when is_pid(Conn) ->
-    reddy_conn:async(Conn, ?LTRIM, [Key, Start, Stop], WantsReturn).
+    reddy_conn:async(Conn, ?LTRIM, [Key, Start, Stop], WantsReturn);
+ltrim_(Pool, Key, Start, Stop, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, ltrim_, [Key, Start, Stop, WantsReturn]).
 
 rpop(Conn, Key) when is_pid(Conn) ->
-    reddy_conn:sync(Conn, ?RPOP, [Key]).
+    reddy_conn:sync(Conn, ?RPOP, [Key]);
+rpop(Pool, Key) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, rpop, [Key]).
 
-rpop_(Conn, Key, WantsReturn) ->
-    reddy_conn:async(Conn, ?RPOP, [Key], WantsReturn).
+rpop_(Conn, Key, WantsReturn) when is_pid(Conn) ->
+    reddy_conn:async(Conn, ?RPOP, [Key], WantsReturn);
+rpop_(Pool, Key, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, rpop_, [Key, WantsReturn]).
 
 rpoplpush(Conn, Source, Dest) when is_pid(Conn) ->
-    reddy_conn:sync(Conn, ?RPOPLPUSH, [Source, Dest]).
+    reddy_conn:sync(Conn, ?RPOPLPUSH, [Source, Dest]);
+rpoplpush(Pool, Source, Dest) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, rpoplpush, [Source, Dest]).
 
 rpoplpush_(Conn, Source, Dest, WantsReturn) when is_pid(Conn) ->
-    reddy_conn:async(Conn, ?RPOPLPUSH, [Source, Dest], WantsReturn).
+    reddy_conn:async(Conn, ?RPOPLPUSH, [Source, Dest], WantsReturn);
+rpoplpush_(Pool, Source, Dest, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, rpoplpush_, [Source, Dest, WantsReturn]).
 
 rpush(Conn, Key, Value) when is_pid(Conn) ->
-    reddy_conn:sync(Conn, ?RPUSH, [Key, Value]).
+    reddy_conn:sync(Conn, ?RPUSH, [Key, Value]);
+rpush(Pool, Key, Value) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, rpush, [Key, Value]).
 
 rpush_(Conn, Key, Value, WantsValue) when is_pid(Conn) ->
-    reddy_conn:async(Conn, ?RPUSH, [Key, Value], WantsValue).
+    reddy_conn:async(Conn, ?RPUSH, [Key, Value], WantsValue);
+rpush_(Pool, Key, Value, WantsValue) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, rpush_, [Key, Value, WantsValue]).
 
 rpushx(Conn, Key, Value) when is_pid(Conn) ->
-    reddy_conn:sync(Conn, ?RPUSHX, [Key, Value]).
+    reddy_conn:sync(Conn, ?RPUSHX, [Key, Value]);
+rpushx(Pool, Key, Value) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, rpushx, [Key, Value]).
 
 rpushx_(Conn, Key, Value, WantsReturn) when is_pid(Conn) ->
-    reddy_conn:async(Conn, ?RPUSHX, [Key, Value], WantsReturn).
+    reddy_conn:async(Conn, ?RPUSHX, [Key, Value], WantsReturn);
+rpushx_(Pool, Key, Value, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, rpushx_, [Key, Value, WantsReturn]).
