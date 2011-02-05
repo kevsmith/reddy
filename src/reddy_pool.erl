@@ -4,6 +4,7 @@
 
 %% API
 -export([start_link/2,
+         with_pool/4,
          new_pool/2,
          check_out/1,
          check_in/1]).
@@ -30,6 +31,18 @@
 new_pool(PoolName, Options) ->
     reddy_pool_sup:new_pool(PoolName, Options).
 
+with_pool(Pool, Mod, Fun, Args) ->
+    try
+        case check_out(Pool) of
+            {ok, Conn} ->
+                erlang:apply(Mod, Fun, [Conn|Args]);
+            Error ->
+                Error
+        end
+    after
+        check_in(Pool)
+    end.
+
 check_out(PoolName) ->
     gen_server:call(PoolName, {checkout, self()}, infinity).
 check_in(PoolName) ->
@@ -43,7 +56,6 @@ start_link(PoolName, Options) ->
 %%===============================================
 
 init([Options]) ->
-    io:format("Options: ~p~n", [Options]),
     Ip = proplists:get_value(ip, Options),
     Port = proplists:get_value(port, Options),
     Pass = proplists:get_value(pass, Options),
@@ -54,8 +66,10 @@ init([Options]) ->
         false ->
             case start_children(Ip, Port, Pass, Count, []) of
                 {ok, Children} ->
+                    io:format("Children: ~p~n", [Children]),
                     {ok, #state{addr=Ip, port=Port, avail=Children}};
                 Error ->
+                    io:format("Error: ~p~n", [Error]),
                     {stop, Error}
             end
     end.
@@ -64,10 +78,9 @@ handle_call({checkout, Owner}, From, #state{avail=[], waiting=Queue}=State) ->
     {noreply, State#state{waiting=queue:in({Owner, From}, Queue)}};
 handle_call({checkout, Owner}, _From, #state{avail=[H|T], owner_to_child=Owners,
                                              child_to_owner=Children}=State) ->
-    %% Process already has a connection so send it an error
     case dict:find(Owner, Owners) of
-        {ok, _} ->
-            {reply, {error, already_checked_out}, State};
+        {ok, {Conn, _MRef}} ->
+            {reply, {ok, Conn}, State};
         error ->
             {Owners1, Children1} = child_out(H, Owner, Owners, Children),
             {reply, {ok, H}, State#state{owner_to_child=Owners1, child_to_owner=Children1, avail=T}}
@@ -159,7 +172,7 @@ child_out(Conn, Owner, Owners, Children) ->
     {Owners1, Children1}.
 
 start_children(_Addr, _Port, _Pass, 0, Accum) ->
-    Accum;
+    {ok, Accum};
 start_children(Addr, Port, Pass, Count, Accum) ->
     case reddy_conn:connect(Addr, Port) of
         {ok, Pid} ->
@@ -174,7 +187,7 @@ start_children(Addr, Port, Pass, Count, Accum) ->
             Error
     end.
 
-do_auth(Pid, undefined) ->
-    Pid;
+do_auth(_Pid, undefined) ->
+    ok;
 do_auth(Pid, Pass) ->
     reddy_server:auth(Pid, Pass).
