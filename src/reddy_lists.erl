@@ -46,7 +46,7 @@ brpoplpush(Conn, Source, Dest, Timeout) ->
 lindex(Conn, Key, Index) when is_pid(Conn) ->
   reddy_conn:sync(Conn, ?LINDEX, [Key, Index]).
 
-lindex_(Conn, Key, Index, WantsReturn) ->
+lindex_(Conn, Key, Index, WantsReturn) when is_pid(Conn) ->
   reddy_conn:async(Conn, ?LINDEX, [Key, Index], WantsReturn).
 
 linsert(Conn, Key, BeforeOrAfter, Pivot, Value) when is_pid(Conn),
