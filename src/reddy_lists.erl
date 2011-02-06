@@ -35,13 +35,19 @@
          rpushx_/4]).
 
 blpop(Conn, Keys, Timeout) when is_pid(Conn) ->
-    reddy_conn:sync(Conn, ?BLPOP, [Keys, Timeout]).
+    reddy_conn:sync(Conn, ?BLPOP, [Keys, Timeout]);
+blpop(Pool, Keys, Timeout) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, blpop, [Keys, Timeout]).
 
 brpop(Conn, Keys, Timeout) when is_pid(Conn) ->
-    reddy_conn:sync(Conn, ?BRPOP, [Keys, Timeout]).
+    reddy_conn:sync(Conn, ?BRPOP, [Keys, Timeout]);
+brpop(Pool, Keys, Timeout) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, brpop, [Keys, Timeout]).
 
 brpoplpush(Conn, Source, Dest, Timeout) ->
-    reddy_conn:sync(Conn, ?BRPOPLPUSH, [Source, Dest, Timeout]).
+    reddy_conn:sync(Conn, ?BRPOPLPUSH, [Source, Dest, Timeout]);
+brpoplpush(Pool, Source, Dest, Timeout) ->
+    ?WITH_POOL(Pool, brpoplpush, [Source, Dest, Timeout]).
 
 lindex(Conn, Key, Index) when is_pid(Conn) ->
     reddy_conn:sync(Conn, ?LINDEX, [Key, Index]);
