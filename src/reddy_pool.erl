@@ -7,7 +7,8 @@
          with_pool/4,
          new_pool/2,
          check_out/1,
-         check_in/1]).
+         check_in/1,
+         close/1]).
 
 -record('DOWN', {mref,
                  type,
@@ -47,6 +48,9 @@ check_out(PoolName) ->
     gen_server:call(PoolName, {checkout, self()}, infinity).
 check_in(PoolName) ->
     gen_server:call(PoolName, {checkin, self()}, infinity).
+
+close(PoolName) ->
+    gen_server:call(PoolName, close, infinity).
 
 start_link(PoolName, Options) ->
     gen_server:start_link({local, PoolName}, ?MODULE, [Options], []).
@@ -97,6 +101,8 @@ handle_call({checkin, Owner}, _From, #state{avail=Avail, owner_to_child=Owners,
             {reply, ok, dequeue_waiting(State1)}
     end;
 
+handle_call(close, _From, State) ->
+    {stop, normal, ok, State};
 handle_call(_Request, _From, State) ->
     {reply, ignore, State}.
 
@@ -117,8 +123,8 @@ handle_info(#'DOWN'{obj=Pid}, #state{owner_to_child=Owners, child_to_owner=Child
              end,
     {noreply, State1}.
 
-terminate(_Reason, #state{child_to_owner=Children}) ->
-    [reddy_conn:close(Child) || Child <- dict:fetch_keys(Children)].
+terminate(_Reason, _State) ->
+    ok.
 
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.

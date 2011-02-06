@@ -8,7 +8,7 @@
 -export([connect/2,
          connect/3,
          close/1,
-         start_link/3,
+         start_link/4,
          sync/3,
          async/3,
          async/4,
@@ -26,13 +26,13 @@ connect(Addr, Port) ->
     connect(Addr, Port, []).
 
 connect(Addr, Port, Opts) ->
-    reddy_conn_sup:new_conn(Addr, Port, Opts).
+    reddy_conn_sup:new_conn(self(), Addr, Port, Opts).
 
 close(Pid) ->
     gen_server:call(Pid, shutdown, infinity).
 
-start_link(Addr, Port, Opts) ->
-    gen_server:start_link(?MODULE, [Addr, Port, Opts], []).
+start_link(Owner, Addr, Port, Opts) ->
+    gen_server:start_link(?MODULE, [Owner, Addr, Port, Opts], []).
 
 sync(Pid, Cmd, Args) ->
     case async(Pid, Cmd, Args) of
@@ -64,9 +64,10 @@ async(Pid, Caller, Cmd, Args, WantsReturn) ->
 %% gen_server callbacks
 %%===============================================
 
-init([Addr, Port, Opts]) ->
+init([Owner, Addr, Port, Opts]) ->
     case gen_tcp:connect(Addr, Port, [binary, {packet, line}, {active, once}]) of
         {ok, Sock} ->
+            erlang:monitor(process, Owner),
             case proplists:get_value(trace_file, Opts) of
                 undefined ->
                     {ok, #state{sock=Sock}};
@@ -104,6 +105,8 @@ handle_call(_Request, _From, State) ->
 handle_cast(_Msg, State) ->
     {noreply, State}.
 
+handle_info({'DOWN', _MRef, _Type, _Object, _Info}, State) ->
+    {stop, normal, State};
 handle_info({tcp, Sock, Data}, #state{cmd_queue=Queue, tracefile=File}=State) ->
     log_server(File, Data),
     inet:setopts(Sock, [{packet, raw}]),
