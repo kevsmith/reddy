@@ -66,10 +66,8 @@ init([Options]) ->
         false ->
             case start_children(Ip, Port, Pass, Count, []) of
                 {ok, Children} ->
-                    io:format("Children: ~p~n", [Children]),
                     {ok, #state{addr=Ip, port=Port, avail=Children}};
                 Error ->
-                    io:format("Error: ~p~n", [Error]),
                     {stop, Error}
             end
     end.
@@ -119,8 +117,8 @@ handle_info(#'DOWN'{obj=Pid}, #state{owner_to_child=Owners, child_to_owner=Child
              end,
     {noreply, State1}.
 
-terminate(_Reason, _State) ->
-    ok.
+terminate(_Reason, #state{child_to_owner=Children}) ->
+    [reddy_conn:close(Child) || Child <- dict:fetch_keys(Children)].
 
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
