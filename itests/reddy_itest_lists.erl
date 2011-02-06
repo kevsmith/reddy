@@ -104,3 +104,15 @@ blpop_one_conn_test() ->
                                           end),
     reddy_keys:del(C1, [?TEST_KEY1]),
     reddy_conn:close(C1).
+
+pooled_lpush_test() ->
+    ?POOL(test_pool, 2),
+    reddy_keys:del(test_pool, [?TEST_KEY1]),
+    ?assertMatch(1, reddy_lists:lpush(test_pool, ?TEST_KEY1, 1)),
+    ?assertMatch(2, reddy_lists:lpush(test_pool, ?TEST_KEY1, 2)),
+    ?assertMatch(3, reddy_lists:lpush(test_pool, ?TEST_KEY1, 3)),
+    ?assertMatch(<<"3">>, reddy_lists:lpop(test_pool, ?TEST_KEY1)),
+    ?assertMatch(<<"2">>, reddy_lists:lpop(test_pool, ?TEST_KEY1)),
+    ?assertMatch(<<"1">>, reddy_lists:lpop(test_pool, ?TEST_KEY1)),
+    reddy_keys:del(test_pool, [?TEST_KEY1]),
+    reddy_pool:close(test_pool).
