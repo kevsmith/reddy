@@ -28,7 +28,9 @@
          type_/3]).
 
 del(Conn, Keys) when is_list(Keys), is_pid(Conn) ->
-    reddy_conn:sync(Conn, ?DEL, Keys).
+    reddy_conn:sync(Conn, ?DEL, Keys);
+del(Pool, Keys) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, del, [Keys]).
 
 del_(Conn, Keys, WantsReturn) when is_list(Keys), is_pid(Conn) ->
     reddy_conn:async(Conn, ?DEL, Keys, WantsReturn).
