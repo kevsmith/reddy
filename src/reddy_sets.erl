@@ -31,86 +31,142 @@
          sunionstore/3,
          sunionstore_/4]).
 
-sadd(Conn, Key, Member) ->
-  reddy_conn:sync(Conn, ?SADD, [Key, Member]).
+sadd(Conn, Key, Member) when is_pid(Conn) ->
+  reddy_conn:sync(Conn, ?SADD, [Key, Member]);
+sadd(Pool, Key, Member) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, sadd, [Key, Member]).
 
-sadd_(Conn, Key, Member, WantsReturn) ->
-  reddy_conn:async(Conn, ?SADD, [Key, Member], WantsReturn).
+sadd_(Conn, Key, Member, WantsReturn) when is_pid(Conn) ->
+  reddy_conn:async(Conn, ?SADD, [Key, Member], WantsReturn);
+sadd_(Pool, Key, Member, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, sadd_, [Key, Member, WantsReturn]).
 
-scard(Conn, Key) ->
-    reddy_conn:sync(Conn, ?SCARD, [Key]).
+scard(Conn, Key) when is_pid(Conn) ->
+    reddy_conn:sync(Conn, ?SCARD, [Key]);
+scard(Pool, Key) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, scard, [Key]).
 
-scard_(Conn, Key, WantsReturn) ->
-    reddy_conn:async(Conn, ?SCARD, [Key], WantsReturn).
+scard_(Conn, Key, WantsReturn) when is_pid(Conn) ->
+    reddy_conn:async(Conn, ?SCARD, [Key], WantsReturn);
+scard_(Pool, Key, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, scard_, [Key, WantsReturn]).
 
-sdiff(Conn, Keys) ->
-    reddy_conn:sync(Conn, ?SDIFF, Keys).
+sdiff(Conn, Keys) when is_pid(Conn) ->
+    reddy_conn:sync(Conn, ?SDIFF, Keys);
+sdiff(Pool, Keys) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, sdiff, [Keys]).
 
-sdiff_(Conn, Keys, WantsReturn) ->
-    reddy_conn:async(Conn, ?SDIFF, Keys, WantsReturn).
+sdiff_(Conn, Keys, WantsReturn) when is_pid(Conn) ->
+    reddy_conn:async(Conn, ?SDIFF, Keys, WantsReturn);
+sdiff_(Pool, Keys, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, sdiff_, [Keys, WantsReturn]).
 
-sdiffstore(Conn, Dest, Keys) ->
-    reddy_conn:sync(Conn, ?SDIFFSTORE, [Dest, Keys]).
+sdiffstore(Conn, Dest, Keys) when is_pid(Conn) ->
+    reddy_conn:sync(Conn, ?SDIFFSTORE, [Dest, Keys]);
+sdiffstore(Pool, Dest, Keys) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, sdiffstore, [Dest, Keys]).
 
-sdiffstore_(Conn, Dest, Keys, WantsReturn) ->
-    reddy_conn:async(Conn, ?SDIFFSTORE, [Dest, Keys], WantsReturn).
+sdiffstore_(Conn, Dest, Keys, WantsReturn) when is_pid(Conn) ->
+    reddy_conn:async(Conn, ?SDIFFSTORE, [Dest, Keys], WantsReturn);
+sdiffstore_(Pool, Dest, Keys, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, sdiffstore_, [Dest, Keys, WantsReturn]).
 
-sinter(Conn, Keys) ->
-    reddy_conn:sync(Conn, ?SINTER, Keys).
+sinter(Conn, Keys) when is_pid(Conn) ->
+    reddy_conn:sync(Conn, ?SINTER, Keys);
+sinter(Pool, Keys) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, sinter, [Keys]).
 
-sinter_(Conn, Keys, WantsReturn) ->
-    reddy_conn:async(Conn, ?SINTER, Keys, WantsReturn).
+sinter_(Conn, Keys, WantsReturn) when is_pid(Conn) ->
+    reddy_conn:async(Conn, ?SINTER, Keys, WantsReturn);
+sinter_(Pool, Keys, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, sinter_, [Keys, WantsReturn]).
 
-sinterstore(Conn, Dest, Keys) ->
-    reddy_conn:sync(Conn, ?SINTERSTORE, [Dest, Keys]).
+sinterstore(Conn, Dest, Keys) when is_pid(Conn) ->
+    reddy_conn:sync(Conn, ?SINTERSTORE, [Dest, Keys]);
+sinterstore(Pool, Dest, Keys) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, sinterstore, [Dest, Keys]).
 
-sinterstore_(Conn, Dest, Keys, WantsReturn) ->
-    reddy_conn:async(Conn, ?SINTERSTORE, [Dest, Keys], WantsReturn).
+sinterstore_(Conn, Dest, Keys, WantsReturn) when is_pid(Conn) ->
+    reddy_conn:async(Conn, ?SINTERSTORE, [Dest, Keys], WantsReturn);
+sinterstore_(Pool, Dest, Keys, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, sinterstore_, [Dest, Keys, WantsReturn]).
 
-sismember(Conn, Key, Member) ->
-    reddy_conn:sync(Conn, ?SISMEMBER, [Key, Member]).
+sismember(Conn, Key, Member) when is_pid(Conn) ->
+    reddy_conn:sync(Conn, ?SISMEMBER, [Key, Member]);
+sismember(Pool, Key, Member) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, sismember, [Key, Member]).
 
 sismember_(Conn, Key, Member, WantsReturn) when is_pid(Conn) ->
-    reddy_conn:async(Conn, ?SISMEMBER, [Key, Member], WantsReturn).
+    reddy_conn:async(Conn, ?SISMEMBER, [Key, Member], WantsReturn);
+sismember_(Pool, Key, Member, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, sismember_, [Key, Member, WantsReturn]).
 
 smembers(Conn, Key) when is_pid(Conn) ->
-    reddy_conn:sync(Conn, ?SMEMBERS, [Key]).
+    reddy_conn:sync(Conn, ?SMEMBERS, [Key]);
+smembers(Pool, Key) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, smembers, [Key]).
 
 smembers_(Conn, Key, WantsReturn) when is_pid(Conn) ->
-    reddy_conn:async(Conn, ?SMEMBERS, [Key], WantsReturn).
+    reddy_conn:async(Conn, ?SMEMBERS, [Key], WantsReturn);
+smembers_(Pool, Key, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, smembers_, [Key, WantsReturn]).
 
 smove(Conn, Source, Dest, Member) when is_pid(Conn) ->
-    reddy_conn:sync(Conn, ?SMOVE, [Source, Dest, Member]).
+    reddy_conn:sync(Conn, ?SMOVE, [Source, Dest, Member]);
+smove(Pool, Source, Dest, Member) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, smove, [Source, Dest, Member]).
 
 smove_(Conn, Source, Dest, Member, WantsReturn) when is_pid(Conn) ->
-    reddy_conn:async(Conn, ?SMOVE, [Source, Dest, Member], WantsReturn).
+    reddy_conn:async(Conn, ?SMOVE, [Source, Dest, Member], WantsReturn);
+smove_(Pool, Source, Dest, Member, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, smove_, [Source, Dest, Member, WantsReturn]).
 
 spop(Conn, Key) when is_pid(Conn) ->
-    reddy_conn:sync(Conn, ?SPOP, [Key]).
+    reddy_conn:sync(Conn, ?SPOP, [Key]);
+spop(Pool, Key) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, spop, [Key]).
 
 spop_(Conn, Key, WantsReturn) when is_pid(Conn) ->
-    reddy_conn:async(Conn, ?SPOP, [Key], WantsReturn).
+    reddy_conn:async(Conn, ?SPOP, [Key], WantsReturn);
+spop_(Pool, Key, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, spop_, [Key, WantsReturn]).
 
 srandmember(Conn, Key) when is_pid(Conn) ->
-    reddy_conn:sync(Conn, ?SRANDMEMBER, [Key]).
+    reddy_conn:sync(Conn, ?SRANDMEMBER, [Key]);
+srandmember(Pool, Key) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, srandmember, [Key]).
 
 srandmember_(Conn, Key, WantsReturn) when is_pid(Conn) ->
-    reddy_conn:async(Conn, ?SRANDMEMBER, [Key], WantsReturn).
+    reddy_conn:async(Conn, ?SRANDMEMBER, [Key], WantsReturn);
+srandmember_(Pool, Key, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, srandmember_, [Key, WantsReturn]).
 
 srem(Conn, Key, Member) when is_pid(Conn) ->
-    reddy_conn:sync(Conn, ?SREM, [Key, Member]).
+    reddy_conn:sync(Conn, ?SREM, [Key, Member]);
+srem(Pool, Key, Member) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, srem, [Key, Member]).
 
 srem_(Conn, Key, Member, WantsReturn) when is_pid(Conn) ->
-    reddy_conn:async(Conn, ?SREM, [Key, Member], WantsReturn).
+    reddy_conn:async(Conn, ?SREM, [Key, Member], WantsReturn);
+srem_(Pool, Key, Member, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, srem_, [Key, Member, WantsReturn]).
 
 sunion(Conn, Keys) when is_pid(Conn) ->
-    reddy_conn:sync(Conn, ?SUNION, Keys).
+    reddy_conn:sync(Conn, ?SUNION, Keys);
+sunion(Pool, Keys) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, sunion, Keys).
 
 sunion_(Conn, Keys, WantsReturn) when is_pid(Conn) ->
-    reddy_conn:async(Conn, ?SUNION, Keys, WantsReturn).
+    reddy_conn:async(Conn, ?SUNION, Keys, WantsReturn);
+sunion_(Pool, Keys, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, sunion_, [Keys, WantsReturn]).
 
 sunionstore(Conn, Dest, Keys) when is_pid(Conn) ->
-    reddy_conn:sync(Conn, ?SUNIONSTORE, [Dest, Keys]).
+    reddy_conn:sync(Conn, ?SUNIONSTORE, [Dest, Keys]);
+sunionstore(Pool, Dest, Keys) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, sunionstore, [Dest, Keys]).
 
 sunionstore_(Conn, Dest, Keys, WantsReturn) when is_pid(Conn) ->
-    reddy_conn:async(Conn, ?SUNIONSTORE, [Dest, Keys], WantsReturn).
+    reddy_conn:async(Conn, ?SUNIONSTORE, [Dest, Keys], WantsReturn);
+sunionstore_(Pool, Dest, Keys, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, sunionstore_, [Dest, Keys, WantsReturn]).
