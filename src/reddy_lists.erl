@@ -44,9 +44,9 @@ brpop(Conn, Keys, Timeout) when is_pid(Conn) ->
 brpop(Pool, Keys, Timeout) when is_atom(Pool) ->
     ?WITH_POOL(Pool, brpop, [Keys, Timeout]).
 
-brpoplpush(Conn, Source, Dest, Timeout) ->
+brpoplpush(Conn, Source, Dest, Timeout) when is_pid(Conn)  ->
     reddy_conn:sync(Conn, ?BRPOPLPUSH, [Source, Dest, Timeout]);
-brpoplpush(Pool, Source, Dest, Timeout) ->
+brpoplpush(Pool, Source, Dest, Timeout) when is_atom(Pool) ->
     ?WITH_POOL(Pool, brpoplpush, [Source, Dest, Timeout]).
 
 lindex(Conn, Key, Index) when is_pid(Conn) ->
