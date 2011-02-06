@@ -28,80 +28,132 @@
          hvals_/3]).
 
 hdel(Conn, Key, Field) when is_pid(Conn) ->
-  reddy_conn:sync(Conn, ?HDEL, [Key, Field]).
+  reddy_conn:sync(Conn, ?HDEL, [Key, Field]);
+hdel(Pool, Key, Field) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, hdel, [Key, Field]).
 
 hdel_(Conn, Key, Field, WantsReturn) when is_pid(Conn) ->
-    reddy_conn:async(Conn, ?HDEL, [Key, Field], WantsReturn).
+    reddy_conn:async(Conn, ?HDEL, [Key, Field], WantsReturn);
+hdel_(Pool, Key, Field, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, hdel_, [Key, Field, WantsReturn]).
 
 hexists(Conn, Key, Field) when is_pid(Conn) ->
-    reddy_conn:sync(Conn, ?HEXISTS, [Key, Field]).
+    reddy_conn:sync(Conn, ?HEXISTS, [Key, Field]);
+hexists(Pool, Key, Field) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, hexists, [Key, Field]).
 
 hexists_(Conn, Key, Field, WantsReturn) when is_pid(Conn) ->
-    reddy_conn:async(Conn, ?HEXISTS, [Key, Field], WantsReturn).
+    reddy_conn:async(Conn, ?HEXISTS, [Key, Field], WantsReturn);
+hexists_(Pool, Key, Field, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, hexists_, [Key, Field, WantsReturn]).
 
 hget(Conn, Key, Field) when is_pid(Conn) ->
-    reddy_conn:sync(Conn, ?HGET, [Key, Field]).
+    reddy_conn:sync(Conn, ?HGET, [Key, Field]);
+hget(Pool, Key, Field) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, hget, [Key, Field]).
 
 hget_(Conn, Key, Field, WantsReturn) when is_pid(Conn) ->
-    reddy_conn:async(Conn, ?HGET, [Key, Field], WantsReturn).
+    reddy_conn:async(Conn, ?HGET, [Key, Field], WantsReturn);
+hget_(Pool, Key, Field, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, hget_, [Key, Field, WantsReturn]).
 
 hgetall(Conn, Key) when is_pid(Conn) ->
-    reddy_conn:sync(Conn, ?HGETALL, [Key]).
+    reddy_conn:sync(Conn, ?HGETALL, [Key]);
+hgetall(Pool, Key) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, hgetall, [Key]).
 
 hgetall_(Conn, Key, WantsReturn) when is_pid(Conn) ->
-    reddy_conn:async(Conn, ?HGETALL, [Key], WantsReturn).
+    reddy_conn:async(Conn, ?HGETALL, [Key], WantsReturn);
+hgetall_(Pool, Key, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, hgetall_, [Key, WantsReturn]).
 
 hincrby(Conn, Key, Field, Increment) when is_pid(Conn) ->
-    reddy_conn:sync(Conn, ?HINCRBY, [Key, Field, Increment]).
+    reddy_conn:sync(Conn, ?HINCRBY, [Key, Field, Increment]);
+hincrby(Pool, Key, Field, Increment) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, hincrby, [Key, Field, Increment]).
 
 hincrby_(Conn, Key, Field, Increment, WantsReturn) when is_pid(Conn) ->
-    reddy_conn:async(Conn, ?HINCRBY, [Key, Field, Increment], WantsReturn).
+    reddy_conn:async(Conn, ?HINCRBY, [Key, Field, Increment], WantsReturn);
+hincrby_(Pool, Key, Field, Increment, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, hincrby_, [Key, Field, Increment, WantsReturn]).
 
 hkeys(Conn, Key) when is_pid(Conn) ->
-    reddy_conn:sync(Conn, ?HKEYS, [Key]).
+    reddy_conn:sync(Conn, ?HKEYS, [Key]);
+hkeys(Pool, Key) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, hkeys, [Key]).
 
 hkeys_(Conn, Key, WantsReturn) when is_pid(Conn) ->
-    reddy_conn:async(Conn, ?HKEYS, [Key], WantsReturn).
+    reddy_conn:async(Conn, ?HKEYS, [Key], WantsReturn);
+hkeys_(Pool, Key, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, hkeys_, [Key, WantsReturn]).
 
 hlen(Conn, Key) when is_pid(Conn) ->
-    reddy_conn:sync(Conn, ?HLEN, [Key]).
+    reddy_conn:sync(Conn, ?HLEN, [Key]);
+hlen(Pool, Key) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, hlen, [Key]).
 
 hlen_(Conn, Key, WantsReturn) when is_pid(Conn) ->
-    reddy_conn:async(Conn, ?HLEN, [Key], WantsReturn).
+    reddy_conn:async(Conn, ?HLEN, [Key], WantsReturn);
+hlen_(Pool, Key, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, hlen_, [Key, WantsReturn]).
 
 hmget(Conn, Key, Fields) when is_list(Fields),
                               is_pid(Conn) ->
-    reddy_conn:sync(Conn, ?HMGET, [Key, Fields]).
+    reddy_conn:sync(Conn, ?HMGET, [Key, Fields]);
+hmget(Pool, Key, Fields) when is_list(Fields),
+                              is_atom(Pool) ->
+    ?WITH_POOL(Pool, hmget, [Key, Fields]).
 
 hmget_(Conn, Key, Fields, WantsReturn) when is_list(Fields),
                                             is_pid(Conn) ->
-    reddy_conn:async(Conn, ?HMGET, [Key, Fields], WantsReturn).
+    reddy_conn:async(Conn, ?HMGET, [Key, Fields], WantsReturn);
+hmget_(Pool, Key, Fields, WantsReturn) when is_list(Fields),
+                                            is_atom(Pool) ->
+    ?WITH_POOL(Pool, hmget_, [Key, Fields, WantsReturn]).
 
 hmset(Conn, Key, FieldValuePairs) when is_list(FieldValuePairs),
                                        is_pid(Conn) ->
-    reddy_conn:sync(Conn, ?HMSET, [Key, convert_field_value_pairs(FieldValuePairs)]).
+    reddy_conn:sync(Conn, ?HMSET, [Key, convert_field_value_pairs(FieldValuePairs)]);
+hmset(Pool, Key, FieldValuePairs) when is_list(FieldValuePairs),
+                                       is_atom(Pool) ->
+    ?WITH_POOL(Pool, hmset, [Key, FieldValuePairs]).
 
 hmset_(Conn, Key, FieldValuePairs, WantsReturn) when is_list(FieldValuePairs),
                                                      is_pid(Conn) ->
-    reddy_conn:async(Conn, ?HMSET, [Key, convert_field_value_pairs(FieldValuePairs)], WantsReturn).
+    reddy_conn:async(Conn, ?HMSET, [Key, convert_field_value_pairs(FieldValuePairs)], WantsReturn);
+hmset_(Pool, Key, FieldValuePairs, WantsReturn) when is_list(FieldValuePairs),
+                                                     is_atom(Pool) ->
+    ?WITH_POOL(Pool, hmset_, [Key, FieldValuePairs, WantsReturn]).
 
 hset(Conn, Key, Field, Value) when is_pid(Conn) ->
-    reddy_conn:sync(Conn, ?HSET, [Key, Field, Value]).
+    reddy_conn:sync(Conn, ?HSET, [Key, Field, Value]);
+hset(Pool, Key, Field, Value) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, hset, [Key, Field, Value]).
 
 hset_(Conn, Key, Field, Value, WantsReturn) when is_pid(Conn) ->
-    reddy_conn:async(Conn, ?HSET, [Key, Field, Value], WantsReturn).
+    reddy_conn:async(Conn, ?HSET, [Key, Field, Value], WantsReturn);
+hset_(Pool, Key, Field, Value, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, hset_, [Key, Field, Value, WantsReturn]).
 
 hsetnx(Conn, Key, Field, Value) when is_pid(Conn) ->
-    reddy_conn:sync(Conn, ?HSETNX, [Key, Field, Value]).
+    reddy_conn:sync(Conn, ?HSETNX, [Key, Field, Value]);
+hsetnx(Pool, Key, Field, Value) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, hsetnx, [Key, Field, Value]).
 
 hsetnx_(Conn, Key, Field, Value, WantsReturn) when is_pid(Conn) ->
-    reddy_conn:async(Conn, ?HSETNX, [Key, Field, Value], WantsReturn).
+    reddy_conn:async(Conn, ?HSETNX, [Key, Field, Value], WantsReturn);
+hsetnx_(Pool, Key, Field, Value, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, hsetnx_, [Key, Field, Value, WantsReturn]).
 
 hvals(Conn, Key) when is_pid(Conn) ->
-    reddy_conn:sync(Conn, ?HVALS, [Key]).
+    reddy_conn:sync(Conn, ?HVALS, [Key]);
+hvals(Pool, Key) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, hvals, [Key]).
 
 hvals_(Conn, Key, WantsReturn) when is_pid(Conn) ->
-    reddy_conn:async(Conn, ?HVALS, [Key], WantsReturn).
+    reddy_conn:async(Conn, ?HVALS, [Key], WantsReturn);
+hvals_(Pool, Key, WantsReturn) when is_atom(Pool) ->
+    ?WITH_POOL(Pool, hvals_, [Key, WantsReturn]).
 
 %% Internal functions
 convert_field_value_pairs(FVPairs) ->
