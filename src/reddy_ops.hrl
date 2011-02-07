@@ -31,7 +31,6 @@
 -define(TTL, "TTL").
 -define(TYPE, "TYPE").
 
-
 %% Set ops
 -define(SADD, "SADD").
 -define(SCARD, "SCARD").
@@ -61,6 +60,26 @@
 -define(HSET, "HSET").
 -define(HSETNX, "HSETNX").
 -define(HVALS, "HVALS").
+
+%% String ops
+-define(APPEND, "APPEND").
+-define(DECR, "DECR").
+-define(DECRBY, "DECRBY").
+-define(GET, "GET").
+-define(GETBIT, "GETBIT").
+-define(GETRANGE, "GETRANGE").
+-define(GETSET, "GETSET").
+-define(INCR, "INCR").
+-define(INCRBY, "INCRBY").
+-define(MGET, "MGET").
+-define(MSET, "MSET").
+-define(MSETNX, "MSETNX").
+-define(SET, "SET").
+-define(SETBIT, "SETBIT").
+-define(SETEX, "SETEX").
+-define(SETNX, "SETNX").
+-define(SETRANGE, "SETRANGE").
+-define(STRLEN, "STRLEN").
 
 %% Server ops
 -define(INFO, "INFO").

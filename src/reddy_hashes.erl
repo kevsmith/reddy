@@ -113,14 +113,14 @@ hmget_(Pool, Key, Fields, WantsReturn) when is_list(Fields),
 
 hmset(Conn, Key, FieldValuePairs) when is_list(FieldValuePairs),
                                        is_pid(Conn) ->
-    reddy_conn:sync(Conn, ?HMSET, [Key, convert_field_value_pairs(FieldValuePairs)]);
+    reddy_conn:sync(Conn, ?HMSET, [Key, reddy_types:convert_field_value_pairs(FieldValuePairs)]);
 hmset(Pool, Key, FieldValuePairs) when is_list(FieldValuePairs),
                                        is_atom(Pool) ->
     ?WITH_POOL(Pool, hmset, [Key, FieldValuePairs]).
 
 hmset_(Conn, Key, FieldValuePairs, WantsReturn) when is_list(FieldValuePairs),
                                                      is_pid(Conn) ->
-    reddy_conn:async(Conn, ?HMSET, [Key, convert_field_value_pairs(FieldValuePairs)], WantsReturn);
+    reddy_conn:async(Conn, ?HMSET, [Key, reddy_types:convert_field_value_pairs(FieldValuePairs)], WantsReturn);
 hmset_(Pool, Key, FieldValuePairs, WantsReturn) when is_list(FieldValuePairs),
                                                      is_atom(Pool) ->
     ?WITH_POOL(Pool, hmset_, [Key, FieldValuePairs, WantsReturn]).
@@ -154,20 +154,3 @@ hvals_(Conn, Key, WantsReturn) when is_pid(Conn) ->
     reddy_conn:async(Conn, ?HVALS, [Key], WantsReturn);
 hvals_(Pool, Key, WantsReturn) when is_atom(Pool) ->
     ?WITH_POOL(Pool, hvals_, [Key, WantsReturn]).
-
-%% Internal functions
-convert_field_value_pairs(FVPairs) ->
-    convert_field_value_pairs(FVPairs, []).
-
-convert_field_value_pairs([], Accum) ->
-    lists:reverse(Accum);
-convert_field_value_pairs([{Field, Value}|T], Accum) ->
-    Field1 = if
-                 is_atom(Field) ->
-                     list_to_binary(atom_to_list(Field));
-                 true ->
-                     Field
-             end,
-    convert_field_value_pairs(T, [[Field1, Value]|Accum]);
-convert_field_value_pairs([H|T], Accum) ->
-    convert_field_value_pairs(T, [H|Accum]).
