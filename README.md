@@ -18,11 +18,11 @@ solid support for executing redis operations asynchronously.
     ok
     2> {ok, Conn} = reddy_conn:connect("127.0.0.1", 6379).
     {ok, <0.50.0>}
-    3> reddy_lists:lpush(Conn, "foo", "1").
+    3> reddy_lists:lpush(Conn, <<"foo">>, <<"1">>).
     1
-    4> reddy_lists:lpush(Conn, "foo", "1").
+    4> reddy_lists:lpush(Conn, <<"foo">>, <<"2">>).
     2
-    5> reddy_lists:lpop(Conn, "foo").
+    5> reddy_lists:lpop(Conn, <<"foo">>).
     <<"2">>
 
 ### Async API
@@ -30,7 +30,7 @@ solid support for executing redis operations asynchronously.
     ok
     2> {ok, Conn} = reddy_conn:connect("127.0.0.1", 6379).
     {ok, <0.50.0>}
-    3> {ok, ResultId} = reddy_lists:lpush_(Conn, "bar", "1", true).
+    3> {ok, ResultId} = reddy_lists:lpush_(Conn, <<"bar">>, <<"1">>, true).
     {ok, #Ref<0.0.100>}
     4> receive {ResultId, Result} -> Result end.
     1
