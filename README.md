@@ -55,7 +55,7 @@ _Note: the trailing underscore on the function name indicates it is an async ope
     {ok, <0.51.0>}
     3> reddy_lists:lpush(production, <<"foo">>, 1).
     1
-    4> {ok, ResultId} = reddy_lists:lpop_(production, <<"foo">>)
+    4> {ok, ResultId} = reddy_lists:lpop_(production, <<"foo">>, true)
     {ok,#Ref<0.0.0.159>}
     5> receive {ResultId, Results} -> Results end.
     <<"1">>
