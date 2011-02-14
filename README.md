@@ -34,7 +34,32 @@ solid support for executing redis operations asynchronously.
     {ok, #Ref<0.0.100>}
     4> receive {ResultId, Result} -> Result end.
     1
+
+### Async fire n' forget API
+    1> application:start(reddy)
+    ok
+    2> {ok, Conn} = reddy_conn:connect("127.0.0.1", 6379).
+    {ok, <0.50.0>}
+    %% Last function arg indicates whether or not the return value
+    %% should be sent to the caller. Response is always parsed to prevent
+    %% memory consumption due to accumulated pipelined responses.
+    3> {ok, ResultId} = reddy_lists:lpush_(Conn, <<"bar">>, <<"1">>, false).
+    ok
+    4>
 _Note: the trailing underscore on the function name indicates it is an async operation._
+
+### Connection pools
+    1> application:start(reddy)
+    ok
+    2> reddy_pool:new_pool(production, [{ip, "127.0.0.1"}, {port, 6379}, {count, 10}]).
+    {ok, <0.51.0>}
+    3> reddy_lists:lpush(production, <<"foo">>, 1).
+    1
+    4> {ok, ResultId} = reddy_lists:lpop_(production, <<"foo">>)
+    {ok,#Ref<0.0.0.159>}
+    5> receive {ResultId, Results} -> Results end.
+    <<"1">>
+    6>
 
 ### Set hashes as proplists
     1> application:start(reddy)
@@ -46,3 +71,9 @@ _Note: the trailing underscore on the function name indicates it is an async ope
     4> reddy_hashes:hvals(C, <<"foo">>).
     [<<"Tuesday">>,<<"awesome">>]
 
+### TODO
+* Support for ordered sets, pub/sub, transactions, and server commands
+* Connection pool support for keys
+* Pool management & introspection API
+* Keep-alive logic for pooled connections
+* More tests (!!!)
