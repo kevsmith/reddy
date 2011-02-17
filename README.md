@@ -43,7 +43,7 @@ solid support for executing redis operations asynchronously.
     %% Last function arg indicates whether or not the return value
     %% should be sent to the caller. Response is always parsed to prevent
     %% memory consumption due to accumulated pipelined responses.
-    3> {ok, ResultId} = reddy_lists:lpush_(Conn, <<"bar">>, <<"1">>, false).
+    3> ok = reddy_lists:lpush_(Conn, <<"bar">>, <<"1">>, false).
     ok
     4>
 _Note: the trailing underscore on the function name indicates it is an async operation._
