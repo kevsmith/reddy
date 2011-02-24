@@ -78,6 +78,8 @@ parse_status(<<"-", Reason/binary>>) ->
 
 parse_integer(<<":", Number/binary>>) ->
     ?BTOI(Number);
+parse_integer(<<"$-1">>) ->
+    0;
 parse_integer(<<"-ERR ", Reason/binary>>) ->
     {error, Reason}.
 
@@ -103,6 +105,7 @@ status_test() ->
 integer_test() ->
     [?assertMatch(100, parse_integer(<<":100">>)),
      ?assertMatch(-1, parse_integer(<<":-1">>)),
+     ?assertMatch(0, parse_integer(<<"$-1">>)),
      ?assertError(function_clause, parse_integer(<<"+OK">>)),
      ?assertError(function_clause, parse_integer(<<"-ERR">>)),
      ?assertError(function_clause, parse_integer(<<"\$3">>))].
